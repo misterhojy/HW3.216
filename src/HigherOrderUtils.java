@@ -1,4 +1,7 @@
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.BiFunction;
+import java.util.stream.IntStream;
 
 /*
 First, write a static nested interface in HigherOrderUtils called NamedBiFunction. This interface must (15)
@@ -68,11 +71,31 @@ public class HigherOrderUtils {
      * @throws IllegalArgumentException if the number of bifunction elements and the number of argument
      * elements do not match up as required.
      */
-    public static <T> T zip(List<T> args, List<BiFunction<T, T, T>> bifunctions) {
-
-        return null;
+    public static <T> T zip(List<T> args, List<? extends BiFunction<T, T, T>> bifunctions) {
+        if (args.size() != bifunctions.size() + 1) {
+            throw new IllegalStateException("Number of Bifunctions must match args");
+        }
+        for(int i = 0; i < bifunctions.size(); i++) {
+            T arg_1 = args.get(i);
+            T arg_2 = args.get(i + 1);
+            T result = bifunctions.get(i).apply(arg_1, arg_2);
+            args.set(i + 1, result);
+        }
+            return args.get(args.size() - 1);
     }
 
+    public static void main(String... args) {
+        List<Double> numbers = Arrays.asList(-0.5, 2d, 3d, 0d, 4d); // documentation example
+        List<NamedBiFunction<Double, Double, Double>> operations = Arrays.asList(add,multiply,add,divide);
+        Double d = zip(numbers, operations); // expected correct value: 1.125
+        // different use case, not with NamedBiFunction objects
+        List<String> strings = Arrays.asList("a", "n", "t");
+        // note the syntax of this lambda expression
+        BiFunction<String, String, String> concat = (s, t) -> s + t;
+        String s = zip(strings, Arrays.asList(concat, concat)); // expected correct value: "ant"
 
+        System.out.println("Expected correct value: 1.125\nResult: " + d);
+        System.out.println("Expected correct value: ant\nResult: " + s);
 
+    }
 }
