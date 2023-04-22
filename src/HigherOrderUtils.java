@@ -1,7 +1,7 @@
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiFunction;
-import java.util.stream.IntStream;
+
 
 /*
 First, write a static nested interface in HigherOrderUtils called NamedBiFunction. This interface must (15)
