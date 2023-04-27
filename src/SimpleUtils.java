@@ -1,6 +1,4 @@
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class SimpleUtils {
@@ -43,5 +41,5 @@ public class SimpleUtils {
                 .map(x -> x.toString() + " -> " + aMap.get(x).toString())
                 .collect(Collectors.toList());
     }
-
 }
+

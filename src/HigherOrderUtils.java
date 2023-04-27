@@ -1,6 +1,10 @@
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.function.BiFunction;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /*
@@ -73,7 +77,7 @@ public class HigherOrderUtils {
      */
     public static <T> T zip(List<T> args, List<? extends BiFunction<T, T, T>> bifunctions) {
         if (args.size() != bifunctions.size() + 1) {
-            throw new IllegalStateException("Number of Bifunctions must match args");
+            throw new IllegalArgumentException("Number of Bifunctions must match args");
         }
         for(int i = 0; i < bifunctions.size(); i++) {
             T arg_1 = args.get(i);
@@ -93,9 +97,5 @@ public class HigherOrderUtils {
         // note the syntax of this lambda expression
         BiFunction<String, String, String> concat = (s, t) -> s + t;
         String s = zip(strings, Arrays.asList(concat, concat)); // expected correct value: "ant"
-
-        System.out.println("Expected correct value: 1.125\nResult: " + d);
-        System.out.println("Expected correct value: ant\nResult: " + s);
-
     }
 }
