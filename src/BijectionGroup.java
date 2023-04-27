@@ -78,17 +78,17 @@ public class BijectionGroup {
                 return x -> x;
             }
             @Override
-            public Function<T, T> inverseOf(Function<T, T> f) {
-                for (Function<T, T> g : bijectSet) {
+            public Function<T, T> inverseOf(Function<T, T> func) {
+                for (Function<T, T> gunc : bijectSet) {
                     boolean isInverse = true;
                     for (T x : domain) {
-                        if (!g.apply(f.apply(x)).equals(x) || !f.apply(g.apply(x)).equals(x)) {
+                        if (!gunc.apply(func.apply(x)).equals(x) || !func.apply(gunc.apply(x)).equals(x)) {
                             isInverse = false;
                             break;
                         }
                     }
                     if (isInverse) {
-                        return g;
+                        return gunc;
                     }
                 }
                 // return identity function as default
@@ -99,18 +99,34 @@ public class BijectionGroup {
     }
 
     public static void main(String... args) {
-        Set<Integer> a_few = Stream.of(1, 2, 3).collect(Collectors.toSet());
-        // you have to figure out the data type in the line below
-        Set<Function<Integer,Integer>> bijections = bijectionsOf(a_few);
+        Set<Integer> a_few3 = Stream.of(1, 2, 3).collect(Collectors.toSet());
+        System.out.println("SET 1,2,3,4: BIJECTION");
+        // you have to figure out the data types in the lines below
+        Group<Function<Integer,Integer>> g = BijectionGroup.bijectionGroup(a_few3);
+        Set<Function<Integer,Integer>>  bijections = BijectionGroup.bijectionsOf(a_few3);
         bijections.forEach(aBijection -> {
-            a_few.forEach(n -> System.out.printf("%d --> %d; ", n, aBijection.apply(n)));
+            a_few3.forEach(b -> System.out.printf("%d --> %d; ", b, aBijection.apply(b)));
             System.out.println();
         });
-        // you have to figure out the data types in the lines below
-        // some of these data types are functional objects, so look into java.util.function.Function
-        Group<Function<Integer,Integer>> g = bijectionGroup(a_few);
-        Function<Integer,Integer> f1 = bijectionsOf(a_few).stream().findFirst().get();
+//        Function<Integer,Integer> f1 = bijections.stream().skip(22).findFirst().orElse(null);
+        Function<Integer,Integer> f1 = bijections.stream().findFirst().get();
         Function<Integer,Integer> f2 = g.inverseOf(f1);
+        Function<Integer,Integer> f3 = g.inverseOf(f2);
         Function<Integer,Integer> id = g.identity();
+        Function<Integer,Integer> comp = g.binaryOperation(f1,f2);
+        System.out.println("First One: ");
+        a_few3.forEach(f -> System.out.printf("%s --> %s; ", f, f1.apply(f)));
+        System.out.println();
+        System.out.println("f2: inverse of f1: ");
+        a_few3.forEach(l -> System.out.printf("%s --> %s; ", l, f2.apply(l)));
+        System.out.println();
+        System.out.println("f3: inverse of f2: ");
+        a_few3.forEach(h -> System.out.printf("%s --> %s; ", h, f3.apply(h)));
+        System.out.println();
+        System.out.println("id: identity: ");
+        a_few3.forEach(i -> System.out.printf("%s --> %s; ", i, id.apply(i)));
+        System.out.println();
+        System.out.println("comp: Binary OP: ");
+        a_few3.forEach(j -> System.out.printf("%s --> %s; ", j, comp.apply(j)));
     }
 }
